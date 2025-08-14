@@ -13,8 +13,8 @@ const Reports = ({ user }) => {
 
   useEffect(() => {
     Promise.all([
-      fetch('http://ac.6glam.com/orders').then(res => res.json()),
-      fetch('http://ac.6glam.com/users').then(res => res.json())
+      fetch('http://31.97.232.158:5000/orders').then(res => res.json()),
+      fetch('http://31.97.232.158:5000/users').then(res => res.json())
     ])
       .then(([ordersData, usersData]) => {
         setOrders(ordersData);

@@ -159,7 +159,7 @@ const Login = ({ onLogin }) => {
 
   useEffect(() => {
     // Load users data
-    fetch('http://ac.6glam.com/users')
+    fetch('http://31.97.232.158:5000/users')
       .then(response => response.json())
       .then(data => setUsers(data))
       .catch(error => console.error('Error loading users:', error));

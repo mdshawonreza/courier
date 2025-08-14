@@ -12,7 +12,7 @@ const AWBManagement = ({ user }) => {
 
   useEffect(() => {
     // Load orders data
-    fetch('http://ac.6glam.com/orders')
+    fetch('http://31.97.232.158:5000/orders')
       .then(response => response.json())
       .then(data => setOrders(data))
       .catch(error => console.error('Error loading orders:', error));

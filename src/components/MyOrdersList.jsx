@@ -18,7 +18,7 @@ const MyOrdersList = ({ user }) => {
 
   useEffect(() => {
     // Load orders created by this user
-    fetch('http://ac.6glam.com/orders')
+    fetch('http://31.97.232.158:5000/orders')
       .then(response => response.json())
       .then(data => {
         const myOrders = data.filter(order => order.createdBy === user.name);

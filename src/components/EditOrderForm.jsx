@@ -29,7 +29,7 @@ const EditOrderForm = ({ user }) => {
 
   useEffect(() => {
     // Fetch order data by id
-    fetch(`http://ac.6glam.com/orders/${id}`)
+    fetch(`http://31.97.232.158:5000/orders/${id}`)
       .then(res => {
         if (!res.ok) throw new Error('Order not found');
         return res.json();
@@ -70,7 +70,7 @@ const EditOrderForm = ({ user }) => {
     setError('');
 
     try {
-      const response = await fetch(`http://ac.6glam.com/orders/${id}`, {
+      const response = await fetch(`http://31.97.232.158:5000/orders/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)

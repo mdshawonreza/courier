@@ -20,7 +20,7 @@ const OrderForm = ({ user }) => {
   const couriers = ['Taposh', 'Saad', 'Govindha', 'Sombo'];
 
   useEffect(() => {
-    fetch('http://ac.6glam.com/orders')
+    fetch('http://31.97.232.158:5000/orders')
       .then(response => response.json())
       .then(data => setOrders(data))
       .catch(error => console.error('Error loading orders:', error));
@@ -76,7 +76,7 @@ const OrderForm = ({ user }) => {
     };
 
     try {
-      const response = await fetch('http://ac.6glam.com/orders', {
+      const response = await fetch('http://31.97.232.158:5000/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newOrder)
