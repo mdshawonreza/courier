@@ -13,7 +13,7 @@ const FilteredOrderListWithExcelUpload = ({ user }) => {
     const couriers = ['Taposh', 'Saad', 'Govindha', 'Sombo'];
 
     useEffect(() => {
-        fetch('http://31.97.232.158:5000/orders')
+        fetch('https://api.packerpanda.store/orders')
             .then(res => res.json())
             .then(data => {
                 let filtered = data;
@@ -171,7 +171,7 @@ const FilteredOrderListWithExcelUpload = ({ user }) => {
     const handleUpdate = async () => {
         if (excelUpdates.length === 0) return;
 
-        const res = await fetch('http://31.97.232.158:5000/orders/bulk-update', {
+        const res = await fetch('https://api.packerpanda.store/orders/bulk-update', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(excelUpdates)

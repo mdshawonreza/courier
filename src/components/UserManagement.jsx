@@ -17,7 +17,7 @@ const UserManagement = ({ user }) => {
   const roles = ['Admin', 'Team Leader', 'Associate', 'Accounts', 'Call Center'];
 
   useEffect(() => {
-    fetch('http://31.97.232.158:5000/users')
+    fetch('https://api.packerpanda.store/users')
       .then(response => response.json())
       .then(data => setUsers(data))
       .catch(error => console.error('Error loading users:', error));
@@ -39,7 +39,7 @@ const UserManagement = ({ user }) => {
     };
 
     try {
-      const response = await fetch('http://31.97.232.158:5000/users', {
+      const response = await fetch('https://api.packerpanda.store/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -103,7 +103,7 @@ const UserManagement = ({ user }) => {
   const deleteUser = async (userId) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
       try {
-        const res = await fetch(`http://31.97.232.158:5000/users/${userId}`, {
+        const res = await fetch(`https://api.packerpanda.store/users/${userId}`, {
           method: 'DELETE'
         });
 

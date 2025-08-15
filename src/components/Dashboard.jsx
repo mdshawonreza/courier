@@ -26,7 +26,7 @@ const Dashboard = ({ user, onLogout }) => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    fetch('http://31.97.232.158:5000/orders')
+    fetch('https://api.packerpanda.store/orders')
       .then((res) => res.json())
       .then((data) => {
         setOrders(data);

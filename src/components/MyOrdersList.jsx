@@ -18,7 +18,7 @@ const MyOrdersList = ({ user }) => {
 
   useEffect(() => {
     // Load orders created by this user
-    fetch('http://31.97.232.158:5000/orders')
+    fetch('https://api.packerpanda.store/orders')
       .then(response => response.json())
       .then(data => {
         const myOrders = data.filter(order => order.createdBy === user.name);

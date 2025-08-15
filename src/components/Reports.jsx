@@ -13,8 +13,8 @@ const Reports = ({ user }) => {
 
   useEffect(() => {
     Promise.all([
-      fetch('http://31.97.232.158:5000/orders').then(res => res.json()),
-      fetch('http://31.97.232.158:5000/users').then(res => res.json())
+      fetch('https://api.packerpanda.store/orders').then(res => res.json()),
+      fetch('https://api.packerpanda.store/users').then(res => res.json())
     ])
       .then(([ordersData, usersData]) => {
         setOrders(ordersData);

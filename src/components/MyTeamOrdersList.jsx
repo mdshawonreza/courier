@@ -10,7 +10,7 @@ const MyTeamOrdersList = ({ user }) => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await fetch('http://31.97.232.158:5000/orders');
+        const res = await fetch('https://api.packerpanda.store/orders');
         const data = await res.json();
 
         const teamOrders = data.filter(

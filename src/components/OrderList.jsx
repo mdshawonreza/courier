@@ -19,7 +19,7 @@ const OrderList = ({ user }) => {
 
   useEffect(() => {
     // Load orders data
-    fetch('http://31.97.232.158:5000/orders')
+    fetch('https://api.packerpanda.store/orders')
       .then(response => response.json())
       .then(data => {
         let filteredData = data;

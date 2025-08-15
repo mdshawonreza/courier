@@ -159,7 +159,7 @@ const Login = ({ onLogin }) => {
 
   useEffect(() => {
     // Load users data
-    fetch('http://31.97.232.158:5000/users')
+    fetch('https://api.packerpanda.store/users')
       .then(response => response.json())
       .then(data => setUsers(data))
       .catch(error => console.error('Error loading users:', error));
