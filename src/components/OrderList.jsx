@@ -3,6 +3,87 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const OrderList = ({ user }) => {
+  // const [comments, setComments] = useState({});
+
+  // প্রতিটি order এর comment handle করার ফাংশন
+
+  const [comments, setComments] = useState({});
+  const [saving, setSaving] = useState({}); // কোন order save হচ্ছে তা track করবে
+
+  // const handleComment = async (orderId) => {
+  //   if (!comments[orderId] || comments[orderId].trim() === "") return;
+
+  //   try {
+  //     // ১. Save comment to backend
+  //     const res = await fetch(`http://localhost:5000/orders/${orderId}/comment`, {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ comment: comments[orderId] }),
+  //     });
+
+  //     if (res.ok) {
+  //       // ২. Fetch updated comments for this order
+  //       const updatedComments = await fetch(`http://localhost:5000/orders/${orderId}/comments`)
+  //         .then(r => r.json());
+
+  //       // ৩. Update orders state with latest comments
+  //       setOrders((prev) =>
+  //         prev.map((o) =>
+  //           o._id === orderId
+  //             ? { ...o, comments: updatedComments } // updated comments
+  //             : o
+  //         )
+  //       );
+
+  //       // ৪. Clear input
+  //       setComments((prev) => ({ ...prev, [orderId]: "" }));
+  //     }
+  //   } catch (error) {
+  //     console.error("Error saving comment:", error);
+  //   }
+  // };
+
+  const handleComment = async (orderId) => {
+    const commentText = comments[orderId]?.trim();
+    if (!commentText) return;
+
+    try {
+      // Start saving
+      setSaving((prev) => ({ ...prev, [orderId]: true }));
+
+      // POST comment
+      const res = await fetch(`https://api.packerpanda.store/orders/${orderId}/comment`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ comment: commentText }),
+      });
+
+      if (!res.ok) throw new Error("Failed to save comment");
+
+      // Fetch latest comments from backend
+      const updatedComments = await fetch(`https://api.packerpanda.store/orders/${orderId}/comments`)
+        .then((r) => r.json());
+
+      // Update UI with latest comment
+      setOrders((prev) =>
+        prev.map((o) =>
+          o._id === orderId ? { ...o, comments: updatedComments } : o
+        )
+      );
+
+      // Clear input box
+      setComments((prev) => ({ ...prev, [orderId]: "" }));
+    } catch (error) {
+      console.error("Error saving comment:", error);
+    } finally {
+      // Stop saving
+      setSaving((prev) => ({ ...prev, [orderId]: false }));
+    }
+  };
+
+
+
+
   const [orders, setOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [filters, setFilters] = useState({
@@ -259,6 +340,9 @@ const OrderList = ({ user }) => {
                   {(user.role === 'Admin' || user.role === 'Accounts') && (
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                   )}
+                  {(user.role === 'Admin' || user.role === 'Call Center') && (
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Comments</th>
+                  )}
 
                 </tr>
               </thead>
@@ -326,6 +410,107 @@ const OrderList = ({ user }) => {
                           Edit
                         </Link>
                       </td>
+                    )}
+                    {(user.role === 'Admin' || user.role === 'Call Center') && (
+                      
+                      // <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      //   <div className="flex flex-col gap-2">
+                      //     {/* Input + Save button */}
+                      //     <div className="flex items-center gap-2">
+                      //       <input
+                      //         type="text"
+                      //         value={comments[order._id] || ""}
+                      //         onChange={(e) =>
+                      //           setComments((prev) => ({ ...prev, [order._id]: e.target.value }))
+                      //         }
+                      //         placeholder="Write a comment"
+                      //         className="border px-2 py-1 rounded w-16 md:w-44"
+                      //       />
+                      //       <button
+                      //         onClick={() => handleComment(order._id)}
+                      //         className={`px-3 py-1 rounded text-white ${saving[order._id]
+                      //             ? "bg-gray-400 cursor-not-allowed"
+                      //             : "bg-blue-600 hover:bg-blue-700"
+                      //           }`}
+                      //         disabled={saving[order._id]}
+                      //       >
+                      //         {saving[order._id] ? "Saving..." : "Save"}
+                      //       </button>
+
+                      //     </div>
+
+
+                      //     {order.comments && order.comments.length > 0 && (
+                      //       <p className="text-gray-700 text-xs mt-1">
+                      //         💬 {order.comments[order.comments.length - 1].text}
+                      //       </p>
+                      //     )}
+
+                      //   </div>
+                      // </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        <div className="flex flex-col gap-2">
+                          {/* Select + Save button */}
+                          <div className="flex items-center gap-2">
+                            <select
+                              value={comments[order._id] || ""}
+                              onChange={(e) =>
+                                setComments((prev) => ({ ...prev, [order._id]: e.target.value }))
+                              }
+                              className="border px-2 py-1 rounded w-28 md:w-60"
+                            >
+                              <option value="">Select comment</option>
+
+                              {/* Call Centre Options */}
+                              <optgroup label="Call Centre">
+                                <option value="Confirmed">Confirmed</option>
+                                <option value="No Response In Call">No Response In Call</option>
+                                <option value="Cancelled By Customer/Customer Didn’t Ordered">
+                                  Cancelled By Customer/Customer Didn’t Ordered
+                                </option>
+                                <option value="Mobile Recharge Issue">Mobile Recharge Issue</option>
+                                <option value="Mobile Off">Mobile Off</option>
+                                <option value="Wrong Number">Wrong Number</option>
+                                <option value="Products Already Received">Products Already Received</option>
+                                <option value="Customer Wants Parcel Different Date">
+                                  Customer Wants Parcel Different Date
+                                </option>
+                              </optgroup>
+
+                              {/* After Dispatched Options */}
+                              <optgroup label="After Dispatched">
+                                <option value="Pick up pending">Pick up pending</option>
+                                <option value="In-transit">In-transit</option>
+                                <option value="Hold">Hold</option>
+                                <option value="Delivered">Delivered</option>
+                                <option value="Returned">Returned</option>
+                                <option value="Non Serviceable Pin Code">
+                                  Non Serviceable Pin Code
+                                </option>
+                              </optgroup>
+                            </select>
+
+                            <button
+                              onClick={() => handleComment(order._id)}
+                              className={`px-3 py-1 rounded text-white ${saving[order._id]
+                                  ? "bg-gray-400 cursor-not-allowed"
+                                  : "bg-blue-600 hover:bg-blue-700"
+                                }`}
+                              disabled={saving[order._id]}
+                            >
+                              {saving[order._id] ? "Saving..." : "Save"}
+                            </button>
+                          </div>
+
+                          {order.comments && order.comments.length > 0 && (
+                            <p className="text-gray-700 text-xs mt-1">
+                              💬 {order.comments[order.comments.length - 1].text}
+                            </p>
+                          )}
+                        </div>
+                      </td>
+
+
                     )}
                   </tr>
                 ))}

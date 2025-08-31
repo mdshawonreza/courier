@@ -46,6 +46,13 @@ const Layout = ({ user, onLogout }) => {
           { name: 'AWB Management', path: '/awb', icon: Tag },
           { name: 'Reports', path: '/reports', icon: BarChart }
         ];
+      case 'Call Center':
+        return [
+          ...baseItems,
+          { name: 'All Orders', path: '/orders', icon: Package },
+          // { name: 'AWB Management', path: '/awb', icon: Tag },
+          // { name: 'Reports', path: '/reports', icon: BarChart }
+        ];
       case 'Admin':
         return [
           ...baseItems,

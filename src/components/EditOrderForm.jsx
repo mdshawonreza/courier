@@ -21,7 +21,10 @@ const EditOrderForm = ({ user }) => {
     awbNumber: '',
     status: 'Pending',
     paymentStatus: 'Unpaid',
-    complaints: ''
+    complaints: '',
+    pinCode: '',       // নতুন
+    city: '',          // নতুন
+    state: '',         // নতুন
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -46,7 +49,10 @@ const EditOrderForm = ({ user }) => {
           awbNumber: data.awbNumber || '',
           status: data.status || 'Pending',
           paymentStatus: data.paymentStatus || 'Unpaid',
-          complaints: data.complaints || ''
+          complaints: data.complaints || '',
+          pinCode: data.pinCode || '',       // নতুন
+          city: data.city || '',          // নতুন
+          state: data.state || '',         // নতুন
         });
         setLoading(false);
       })
@@ -81,12 +87,12 @@ const EditOrderForm = ({ user }) => {
         throw new Error(resData.message || 'Failed to update order');
       }
       Swal.fire({
-      
-                icon: "success",
-                title: "Order updated successfully!",
-                showConfirmButton: false,
-                timer: 1500
-              });
+
+        icon: "success",
+        title: "Order updated successfully!",
+        showConfirmButton: false,
+        timer: 1500
+      });
       // alert('Order updated successfully!');
       navigate('/orders');
     } catch (err) {
@@ -168,6 +174,44 @@ const EditOrderForm = ({ user }) => {
                     rows="3"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black bg-white"
                     placeholder="Enter full delivery address"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Pin Code *</label>
+                  <input
+                    type="text"
+                    name="pinCode"
+                    value={formData.pinCode}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                    placeholder="Enter pin code"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">City/District *</label>
+                  <input
+                    type="text"
+                    name="city"
+                    value={formData.city}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                    placeholder="Enter city/district"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">State *</label>
+                  <input
+                    type="text"
+                    name="state"
+                    value={formData.state}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                    placeholder="Enter state"
                     required
                   />
                 </div>
