@@ -12,7 +12,7 @@ const Login = ({ onLogin }) => {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // Added
+  const [showPassword, setShowPassword] = useState(false); 
 
   useEffect(() => {
     // Load users data
