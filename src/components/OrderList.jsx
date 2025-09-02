@@ -1,47 +1,11 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const OrderList = ({ user }) => {
-  // const [comments, setComments] = useState({});
-
-  // প্রতিটি order এর comment handle করার ফাংশন
 
   const [comments, setComments] = useState({});
-  const [saving, setSaving] = useState({}); // কোন order save হচ্ছে তা track করবে
+  const [saving, setSaving] = useState({});
 
-  // const handleComment = async (orderId) => {
-  //   if (!comments[orderId] || comments[orderId].trim() === "") return;
-
-  //   try {
-  //     // ১. Save comment to backend
-  //     const res = await fetch(`http://localhost:5000/orders/${orderId}/comment`, {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({ comment: comments[orderId] }),
-  //     });
-
-  //     if (res.ok) {
-  //       // ২. Fetch updated comments for this order
-  //       const updatedComments = await fetch(`http://localhost:5000/orders/${orderId}/comments`)
-  //         .then(r => r.json());
-
-  //       // ৩. Update orders state with latest comments
-  //       setOrders((prev) =>
-  //         prev.map((o) =>
-  //           o._id === orderId
-  //             ? { ...o, comments: updatedComments } // updated comments
-  //             : o
-  //         )
-  //       );
-
-  //       // ৪. Clear input
-  //       setComments((prev) => ({ ...prev, [orderId]: "" }));
-  //     }
-  //   } catch (error) {
-  //     console.error("Error saving comment:", error);
-  //   }
-  // };
 
   const handleComment = async (orderId) => {
     const commentText = comments[orderId]?.trim();
@@ -106,9 +70,9 @@ const OrderList = ({ user }) => {
         let filteredData = data;
 
         // Filter based on user role
-        if (user.role === 'Associate') {
+        if (user.role === 'Booking Operator') {
           filteredData = data.filter(order => order.createdBy === user.name);
-        } else if (user.role === 'Team Leader') {
+        } else if (user.role === 'Merchant') {
           filteredData = data.filter(order => order.agentCode === user.agentCode);
         }
 
@@ -134,14 +98,27 @@ const OrderList = ({ user }) => {
       filtered = filtered.filter(order => order.status === filters.status);
     }
 
-    if (filters.search) {
-      filtered = filtered.filter(order =>
-        order.orderId.toLowerCase().includes(filters.search.toLowerCase()) ||
-        order.customerName.toLowerCase().includes(filters.search.toLowerCase()) ||
-        order.customerPhone.includes(filters.search) ||
-        order.awbNumber.toLowerCase().includes(filters.search.toLowerCase())
-      );
-    }
+    // if (filters.search) {
+    //   filtered = filtered.filter(order =>
+    //     order.orderId.toLowerCase().includes(filters.search.toLowerCase()) ||
+    //     order.customerName.toLowerCase().includes(filters.search.toLowerCase()) ||
+    //     order.customerPhone.includes(filters.search) ||
+    //     order.awbNumber.toLowerCase().includes(filters.search.toLowerCase())
+    //   );
+    // }
+ if (filters.search) {
+  const search = filters.search.toLowerCase();
+
+  filtered = filtered.filter(order =>
+    (order.orderId?.toString().toLowerCase() || "").includes(search) ||
+    (order.customerName?.toLowerCase() || "").includes(search) ||
+    (order.customerPhone?.toString() || "").includes(filters.search) ||
+    (order.awbNumber?.toString().toLowerCase() || "").includes(search) ||
+     (order.createdBy?.toLowerCase() || "").includes(search) ||
+     (order.createdByEmail?.toLowerCase() || "").includes(search) ||
+     (order.uniqueCode?.toLowerCase() || "").includes(search)
+  );
+}
 
     if (filters.dateFrom) {
       filtered = filtered.filter(order =>
@@ -222,7 +199,7 @@ const OrderList = ({ user }) => {
                 <p className="text-gray-600 mt-1">Manage and track all courier orders</p>
               </div>
               <div className="flex space-x-3">
-                {(user.role === 'Associate' || user.role === 'Admin') && (
+                {(user.role === 'Booking Operator' || user.role === 'Admin') && (
                   <Link
                     to="/orders/new"
                     className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center"
@@ -332,7 +309,7 @@ const OrderList = ({ user }) => {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Courier</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">AWB</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                  {user.role === 'Team Leader' && (
+                  {user.role === 'Merchant' && (
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Complaints</th>
                   )}
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
@@ -392,7 +369,7 @@ const OrderList = ({ user }) => {
                         {order.status}
                       </span>
                     </td>
-                    {user.role === 'Team Leader' && (
+                    {user.role === 'Merchant' && (
                       <td className="px-6 py-4 text-sm text-black">
                         {order.complaints || 'No complaints'}
                       </td>
@@ -412,7 +389,7 @@ const OrderList = ({ user }) => {
                       </td>
                     )}
                     {(user.role === 'Admin' || user.role === 'Call Center') && (
-                      
+
                       // <td className="px-6 py-4 whitespace-nowrap text-sm">
                       //   <div className="flex flex-col gap-2">
                       //     {/* Input + Save button */}
@@ -493,8 +470,8 @@ const OrderList = ({ user }) => {
                             <button
                               onClick={() => handleComment(order._id)}
                               className={`px-3 py-1 rounded text-white ${saving[order._id]
-                                  ? "bg-gray-400 cursor-not-allowed"
-                                  : "bg-blue-600 hover:bg-blue-700"
+                                ? "bg-gray-400 cursor-not-allowed"
+                                : "bg-blue-600 hover:bg-blue-700"
                                 }`}
                               disabled={saving[order._id]}
                             >

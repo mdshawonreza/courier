@@ -22,23 +22,25 @@ const Layout = ({ user, onLogout }) => {
   const getMenuItems = () => {
     const baseItems = [
       { name: 'Dashboard', path: '/', icon: Home },
-      
+
     ];
 
     switch (user?.role) {
-      case 'Associate':
-        return [...baseItems, 
-          { name: 'New Order', path: '/orders/new', icon: Plus },
-          { name: 'My Orders', path: '/myOrders', icon: Package }
-        ];
-      case 'Team Leader':
+      case 'Booking Operator':
         return [...baseItems,
-          //  { name: 'Reports', path: '/reports', icon: BarChart }
-          { name: 'New Order', path: '/orders/new', icon: Plus },
-          { name: 'My Orders', path: '/myOrders', icon: Package },
-          { name: 'My Team Orders', path: '/myTeamOrders', icon: Package },
-          
-          ];
+        { name: 'New Order', path: '/orders/new', icon: Plus },
+        { name: 'My Orders', path: '/myOrders', icon: Package }
+        ];
+      case 'Merchant':
+        return [...baseItems,
+        //  { name: 'Reports', path: '/reports', icon: BarChart }
+        { name: 'New Order', path: '/orders/new', icon: Plus },
+        { name: 'My Orders', path: '/myOrders', icon: Package },
+        { name: 'My Team Orders', path: '/myTeamOrders', icon: Package },
+        { name: 'User Management', path: '/users', icon: Users },
+
+
+        ];
       case 'Accounts':
         return [
           ...baseItems,
@@ -74,9 +76,8 @@ const Layout = ({ user, onLogout }) => {
     <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
       <div
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform ${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+          } transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}
       >
         <div className="flex items-center justify-between h-16 px-6 bg-blue-600">
           <div className="flex items-center">
@@ -98,11 +99,10 @@ const Layout = ({ user, onLogout }) => {
               <Link
                 key={item.name}
                 to={item.path}
-                className={`flex items-center px-6 py-3 text-sm font-medium transition-colors duration-200 hover:bg-gray-100 hover:text-blue-600 ${
-                  isActive
+                className={`flex items-center px-6 py-3 text-sm font-medium transition-colors duration-200 hover:bg-gray-100 hover:text-blue-600 ${isActive
                     ? 'bg-blue-50 text-blue-600 border-r-4 border-blue-600'
                     : 'text-gray-600'
-                }`}
+                  }`}
                 onClick={() => setIsSidebarOpen(false)}
               >
                 <item.icon className="h-5 w-5 mr-3" />
@@ -150,7 +150,7 @@ const Layout = ({ user, onLogout }) => {
                 {navigation.find((item) => item.path === location.pathname)?.name || 'Dashboard'}
               </h1> */}
               <h1 className="text-2xl font-bold text-gray-900">
-                 Dashboard
+                Dashboard
               </h1>
             </div>
             <div className="flex items-center space-x-4">

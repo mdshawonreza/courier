@@ -17,9 +17,9 @@ const FilteredOrderListWithExcelUpload = ({ user }) => {
             .then(res => res.json())
             .then(data => {
                 let filtered = data;
-                if (user.role === 'Associate') {
+                if (user.role === 'Booking Operator') {
                     filtered = data.filter(o => o.createdBy === user.name);
-                } else if (user.role === 'Team Leader') {
+                } else if (user.role === 'Merchant') {
                     filtered = data.filter(o => o.agentCode === user.agentCode);
                 }
                 setOrders(filtered);

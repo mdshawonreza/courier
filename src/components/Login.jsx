@@ -1,6 +1,4 @@
 
-
-
 import { Mail, Package } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
@@ -128,17 +126,17 @@ const Login = ({ onLogin }) => {
           </button>
         </form>
       </div>
-       <div className="mt-8 text-center">
+       {/* <div className="mt-8 text-center">
         <div className="text-sm text-gray-600">
           <p className="mb-2">Demo Accounts:</p>
         <div className="space-y-1 text-xs">
-           <p><strong>Admin:</strong> admin@courier.com / admin123</p>
-            <p><strong>Team Leader:</strong> tl@courier.com / tl123</p>
-            <p><strong>Associate:</strong> associate@courier.com / associate123</p>
-           <p><strong>Accounts:</strong> accounts@courier.com / accounts123</p>
-           <p><strong>Call Center:</strong> sayed123@gmail.com / 12345678</p>
+           <p><strong>Admin:</strong> tuhan@gmail.com / 12345678</p>
+            <p><strong>Merchant:</strong> irfan@gmail.com / 12345678</p>
+            <p><strong>Booking Operator:</strong> forhad@gmail.com / 12345678</p>
+           <p><strong>Accounts:</strong> najib@gmail.com / 12345678</p>
+           <p><strong>Call Center:</strong> rifat@gmail.com / 12345678</p>
           </div>         </div>
-       </div>
+       </div> */}
     </div>
   );
 };

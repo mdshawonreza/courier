@@ -14,7 +14,7 @@ const MyTeamOrdersList = ({ user }) => {
         const data = await res.json();
 
         const teamOrders = data.filter(
-          (order) => order.agentCode === user.agentCode
+          (order) => order.agentCode === user.uniqueCode
         );
         setOrders(teamOrders);
         setFilteredOrders(teamOrders);
@@ -38,7 +38,7 @@ const MyTeamOrdersList = ({ user }) => {
       <h2 className="text-2xl font-bold mb-4 text-gray-800">My Team Orders</h2>
 
       {/* Search Bar with Lucide Icon */}
-      <div className="mb-4 flex items-center border border-gray-300 rounded-lg px-3 py-2 w-full md:w-96 bg-white shadow-sm">
+      {/* <div className="mb-4 flex items-center border border-gray-300 rounded-lg px-3 py-2 w-full md:w-96 bg-white shadow-sm">
         <Search className="w-5 h-5 text-gray-500 mr-2" />
         <input
           type="text"
@@ -47,7 +47,7 @@ const MyTeamOrdersList = ({ user }) => {
           onChange={(e) => setSearch(e.target.value)}
           className="flex-1 outline-none text-sm text-gray-700"
         />
-      </div>
+      </div> */}
 
       {/* Orders Table */}
       <div className="overflow-x-auto bg-white rounded-lg shadow">

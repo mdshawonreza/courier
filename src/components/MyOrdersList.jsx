@@ -44,14 +44,28 @@ const MyOrdersList = ({ user }) => {
       filtered = filtered.filter(order => order.status === filters.status);
     }
 
+    // if (filters.search) {
+    //   filtered = filtered.filter(order =>
+    //     order.orderId.toLowerCase().includes(filters.search.toLowerCase()) ||
+    //     order.customerName.toLowerCase().includes(filters.search.toLowerCase()) ||
+    //     order.customerPhone.includes(filters.search) ||
+    //     order.awbNumber.toLowerCase().includes(filters.search.toLowerCase())
+    //   );
+    // }
     if (filters.search) {
-      filtered = filtered.filter(order =>
-        order.orderId.toLowerCase().includes(filters.search.toLowerCase()) ||
-        order.customerName.toLowerCase().includes(filters.search.toLowerCase()) ||
-        order.customerPhone.includes(filters.search) ||
-        order.awbNumber.toLowerCase().includes(filters.search.toLowerCase())
-      );
-    }
+  const search = filters.search.toLowerCase();
+
+  filtered = filtered.filter(order =>
+    (order.orderId?.toString().toLowerCase() || "").includes(search) ||
+    (order.customerName?.toLowerCase() || "").includes(search) ||
+    (order.customerPhone?.toString() || "").includes(filters.search) ||
+    (order.awbNumber?.toString().toLowerCase() || "").includes(search) ||
+     (order.createdBy?.toLowerCase() || "").includes(search) ||
+     (order.createdByEmail?.toLowerCase() || "").includes(search) ||
+     (order.uniqueCode?.toLowerCase() || "").includes(search)
+ 
+  );
+}
 
     if (filters.dateFrom) {
       filtered = filtered.filter(order =>

@@ -134,13 +134,13 @@ const Dashboard = ({ user, onLogout }) => {
             <h1 className="text-2xl font-bold">Welcome back, {user?.name}!</h1>
             <p className="mt-2 text-blue-200 max-w-xl">
               {user?.role === 'Admin' && 'Manage your courier operations efficiently.'}
-              {user?.role === 'Team Leader' && "Track your team's performance."}
-              {user?.role === 'Associate' && 'Create and manage your orders.'}
+              {user?.role === 'Merchant' && "Track your team's performance."}
+              {user?.role === 'Booking Operator' && 'Create and manage your orders.'}
               {user?.role === 'Accounts' && 'Manage AWB numbers and payments.'}
               {user?.role === 'Call Center' && 'Handle customer inquiries.'}
             </p>
           </div>
-          {(user?.role === 'Associate' || user?.role === 'Team Leader') && (
+          {(user?.role === 'Booking Operator' || user?.role === 'Merchant') && (
             <Link
               to="/orders/new"
               className="bg-white text-blue-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 flex items-center"
