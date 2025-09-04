@@ -1,7 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 const MyOrdersList = ({ user }) => {
+
+  const scrollRef = useRef(null);
+  const [isDown, setIsDown] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+
+  const handleMouseDown = (e) => {
+    setIsDown(true);
+    setStartX(e.pageX - scrollRef.current.offsetLeft);
+    setScrollLeft(scrollRef.current.scrollLeft);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDown(false);
+  };
+
+  const handleMouseUp = () => {
+    setIsDown(false);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - scrollRef.current.offsetLeft;
+    const walk = (x - startX) * 1; // 1 = scroll speed
+    scrollRef.current.scrollLeft = scrollLeft - walk;
+  };
+
   const [orders, setOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [filters, setFilters] = useState({
@@ -53,19 +81,19 @@ const MyOrdersList = ({ user }) => {
     //   );
     // }
     if (filters.search) {
-  const search = filters.search.toLowerCase();
+      const search = filters.search.toLowerCase();
 
-  filtered = filtered.filter(order =>
-    (order.orderId?.toString().toLowerCase() || "").includes(search) ||
-    (order.customerName?.toLowerCase() || "").includes(search) ||
-    (order.customerPhone?.toString() || "").includes(filters.search) ||
-    (order.awbNumber?.toString().toLowerCase() || "").includes(search) ||
-     (order.createdBy?.toLowerCase() || "").includes(search) ||
-     (order.createdByEmail?.toLowerCase() || "").includes(search) ||
-     (order.uniqueCode?.toLowerCase() || "").includes(search)
- 
-  );
-}
+      filtered = filtered.filter(order =>
+        (order.orderId?.toString().toLowerCase() || "").includes(search) ||
+        (order.customerName?.toLowerCase() || "").includes(search) ||
+        (order.customerPhone?.toString() || "").includes(filters.search) ||
+        (order.awbNumber?.toString().toLowerCase() || "").includes(search) ||
+        (order.createdBy?.toLowerCase() || "").includes(search) ||
+        (order.createdByEmail?.toLowerCase() || "").includes(search) ||
+        (order.uniqueCode?.toLowerCase() || "").includes(search)
+
+      );
+    }
 
     if (filters.dateFrom) {
       filtered = filtered.filter(order =>
@@ -243,14 +271,26 @@ const MyOrdersList = ({ user }) => {
           </div>
 
           {/* Orders Table */}
-          <div className="overflow-x-auto">
+          <div
+            ref={scrollRef}
+            className="overflow-x-auto cursor-grab active:cursor-grabbing"
+            onMouseDown={handleMouseDown}
+            onMouseLeave={handleMouseLeave}
+            onMouseUp={handleMouseUp}
+            onMouseMove={handleMouseMove}
+          >
             <table className="min-w-full">
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gender</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Age</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Address</th> {/* নতুন */}
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Advance Amount</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Collected Amount</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Amount</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Courier</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">AWB</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
@@ -280,23 +320,51 @@ const MyOrdersList = ({ user }) => {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+                      {order.gender || "-"}
+                    </td>
+
+                    {/* Age */}
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+                      {order.age || "-"}
+                    </td>
+                    <td className="px-4 py-4 text-sm text-black whitespace-normal break-words max-w-xm">
+                      <div>{order.customerAddress || "N/A"}</div>
+                      {order.city && <div>{order.city}</div>}
+                      {order.state && <div>{order.state}</div>}
+                      {order.pinCode && <div>{order.pinCode}</div>}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
                       <div>
                         <div>{order.productName}</div>
                         <div className="text-gray-500">Qty: {order.quantity}</div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-black">৳{order.amount}</td>
+                    {/* Advance */}
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+                      {order.advanceAmount || 0}
+                    </td>
+
+                    {/* Collected */}
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+                      {order.collectedAmount || 0}
+                    </td>
+
+                    {/* Total */}
+
+
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+                      {order.amount}
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-black">{order.courier}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
                       {order.awbNumber || 'Not Assigned'}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                        order.status === 'Delivered' ? 'bg-green-100 text-green-800' :
-                        order.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
-                        order.status === 'In Transit' ? 'bg-blue-100 text-blue-800' :
-                        'bg-red-100 text-red-800'
-                      }`}>
+                      <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${order.status === 'Delivered' ? 'bg-green-100 text-green-800' :
+                          order.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
+                            order.status === 'In Transit' ? 'bg-blue-100 text-blue-800' :
+                              'bg-red-100 text-red-800'
+                        }`}>
                         {order.status}
                       </span>
                     </td>

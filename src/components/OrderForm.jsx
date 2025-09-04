@@ -10,12 +10,17 @@ const OrderForm = ({ user }) => {
 
   const [formData, setFormData] = useState({
     customerName: '',
+    gender: '',         // 🆕 Gender
+    age: '',            // 🆕 Age
     countryCode: '+880',
     customerPhone: '',
     customerAddress: '',
     productName: '',
     quantity: 1,
     amount: '',
+    advanceAmount: '',  // 🆕 Advance
+    collectedAmount: '',// 🆕 Collected
+    // totalAmount: '',    // 🆕 Total
     courier: '',
     pinCode: '',       // নতুন
     city: '',          // নতুন
@@ -108,15 +113,15 @@ const OrderForm = ({ user }) => {
       createdBy: user.name,
       createdByEmail: user.email,
       agentCode: user.agentCode,
-      uniqueCode:user.uniqueCode,
+      uniqueCode: user.uniqueCode,
       createdAt: new Date().toISOString(),
-      complaints:formData.complaints || '',
-      pinCode:formData.pinCode ||'',       // নতুন
-      city:formData.city || '',          // নতুন
-      state:formData.state ||'',         // নতুন
+      complaints: formData.complaints || '',
+      pinCode: formData.pinCode || '',       // নতুন
+      city: formData.city || '',          // নতুন
+      state: formData.state || '',         // নতুন
       duplicate: isDuplicate
     };
-console.log(newOrder)
+    console.log(newOrder)
     try {
       const response = await fetch('https://api.packerpanda.store/orders', {
         method: 'POST',
@@ -169,6 +174,37 @@ console.log(newOrder)
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Customer Name *</label>
                   <input type="text" name="customerName" value={formData.customerName} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="Enter customer name" required />
+                </div>
+
+
+                {/* 🆕 Gender */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Gender *</label>
+                  <select
+                    name="gender"
+                    value={formData.gender}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white"
+                    required
+                  >
+                    <option value="">Select gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
+                {/* 🆕 Age */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Age *</label>
+                  <input
+                    type="number"
+                    name="age"
+                    value={formData.age}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                    required
+                  />
                 </div>
 
                 <div>
@@ -236,7 +272,7 @@ console.log(newOrder)
                   />
                 </div>
 
-                
+
               </div>
 
               {/* Order Info */}
@@ -253,10 +289,27 @@ console.log(newOrder)
                   <input type="number" name="quantity" value={formData.quantity} onChange={handleChange} min="1" className="w-full px-4 py-3 border border-gray-300 rounded-lg" required />
                 </div>
 
+                
+
+                {/* 🆕 Advance, Collected, Total */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Amount (৳) *</label>
-                  <input type="number" name="amount" value={formData.amount} onChange={handleChange} min="0" step="0.01" className="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="Enter amount" required />
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Advance Amount (৳)</label>
+                  <input type="number" name="advanceAmount" value={formData.advanceAmount} onChange={handleChange} min="0" step="0.01" className="w-full px-4 py-3 border border-gray-300 rounded-lg" />
                 </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Collected Amount (৳)</label>
+                  <input type="number" name="collectedAmount" value={formData.collectedAmount} onChange={handleChange} min="0" step="0.01" className="w-full px-4 py-3 border border-gray-300 rounded-lg" />
+                </div>
+                {/* <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Total Amount (৳)</label>
+                  <input type="number" name="totalAmount" value={formData.totalAmount} onChange={handleChange} min="0" step="0.01" className="w-full px-4 py-3 border border-gray-300 rounded-lg" />
+                </div> */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Total Amount (৳) *</label>
+                  <input type="number" name="amount" value={formData.amount} onChange={handleChange} min="0" step="0.01" className="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="Enter Total amount" required />
+                </div>
+
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Delivery Address *</label>
                   <textarea name="customerAddress" value={formData.customerAddress} onChange={handleChange} rows="3" className="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="Enter full delivery address" required />
